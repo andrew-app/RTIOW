@@ -1,5 +1,6 @@
 import array
 import sys
+from PIL import Image, ImageFilter
 
 def main():
     img_width = 256
@@ -35,7 +36,7 @@ def main():
             image[index] = int(ir)
             image[index+1] = int(ig)
             image[index+2] = int(ib)
-            print(f'\n{int(ir)} {int(ig)} {int(ib)}\n')
+            print(f'{int(ir)} {int(ig)} {int(ib)}\n')
     sys.stderr.write(f'\nDone.\n')
 
     with open("img.ppm", 'wb') as f:
@@ -47,3 +48,5 @@ def main():
 
 main()
 
+original_image = Image.open("img.ppm")
+original_image.show()
