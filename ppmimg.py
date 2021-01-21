@@ -50,3 +50,4 @@ main()
 
 original_image = Image.open("img.ppm")
 original_image.show()
+
