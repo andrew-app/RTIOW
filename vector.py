@@ -16,17 +16,25 @@ class Vec3:
     def g(self): return int(self.e[1])
     def b(self): return int(self.e[2])
 
-    def add(self, v=[]):
-        v = array.array('f', v)
-        return Vec3(data=(self.x() + v.x(), v.y() + v.y(), v.z() + v.z()))
+    def add(self, v):
+        return Vec3(e=(self.x() + v.x(), self.y() + v.y(), self.z() + v.z()))
+
+    def multiply(self, t):
+        return Vec3(e=(self.x()*t, self.y()*t, self.z()*t))
+
+    def divide(self, t):
+        return Vec3(e=(round(self.x(), 2)/t, self.y()/t, self.z()/t))
 
 
 
+t1 = Vec3([250, 1, 1])
 
-test = Vec3([253])
+t2 = Vec3([2, 0, 0])
 
+t3 = t1.divide(3)
 
-print(test.add([1]))
+print(t3)
+
 
 
 
