@@ -32,9 +32,9 @@ def main():
 
             ncol = col.multiply_s(255)
 
-            image[index] = int(ncol.x())
-            image[index+1] = int(ncol.y())
-            image[index+2] = int(ncol.z())
+            image[index] = int(ncol.r())
+            image[index+1] = int(ncol.g())
+            image[index+2] = int(ncol.b())
             print(f'{int(ncol.x())} {int(ncol.y())} {int(ncol.z())}\n')
 
     sys.stderr.write(f'\nDone.\n')
