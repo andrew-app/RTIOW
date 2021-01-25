@@ -1,5 +1,5 @@
 import array
-
+import math as m
 
 class Vec3:
     def __init__(self, e=[]):
@@ -19,21 +19,46 @@ class Vec3:
     def add(self, v):
         return Vec3(e=(self.x() + v.x(), self.y() + v.y(), self.z() + v.z()))
 
-    def multiply(self, t):
-        return Vec3(e=(self.x()*t, self.y()*t, self.z()*t))
+    def sub(self, v):
+        return Vec3(e=(self.x() - v.x(), self.y() - v.y(), self.z() - v.z()))
 
     def divide(self, t):
         return Vec3(e=(round(self.x(), 2)/t, self.y()/t, self.z()/t))
 
+    def multiply(self, v):
+        return Vec3(e=(self.x() * v.x(), self.y() * v.y(), self.z() * v.z()))
 
 
-t1 = Vec3([250, 1, 1])
+    def multiply_s(self, t):
+        return Vec3(e=(self.x() * t, self.y() * t, self.z() * t))
+
+    def arrlen(self):
+        return len(self.e)
+
+    def length(self):
+        a = Vec3(e=(self.x() * self.x(), self.y() * self.y(), self.z() * self.z()))
+        ls = a.x() + a.y() + a.z()
+        return round(m.sqrt(ls), 3)
+
+    def length_s(self):
+        a = Vec3(e=(self.x() * self.x(), self.y() * self.y(), self.z() * self.z()))
+        return a.x()+a.y()+a.z()
+
+    def dot_p(self, v):
+        a = Vec3(e=(self.x() * v.x(), self.y() * v.y(), self.z() * v.z()))
+        return a.x()+a.y()+a.z()
+
+    def cross_p(self, v):
+        a = Vec3(e=(self.y() * v.z(), self.z() * v.x(), self.x() * v.y()))
+        b = Vec3(e=(self.z() * v.y(), self.x() * v.y(), self.y() * v.x()))
+        return Vec3(e=(a.x() - b.x(), a.y() - b.y(), a.z()-b.z()))
+
+
+t1 = Vec3([250, 2, 3])
 
 t2 = Vec3([2, 0, 0])
 
-t3 = t1.divide(3)
-
-print(t3)
+print(t1.dot_p(t2))
 
 
 

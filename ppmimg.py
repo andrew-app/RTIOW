@@ -1,6 +1,8 @@
 import array
 import sys
 from PIL import Image, ImageFilter
+from vector import Vec3
+
 
 def main():
     img_width = 256
@@ -26,17 +28,15 @@ def main():
         for i in range(0, img_width, 1):
             index = 3 * (k * img_width + i)
 
-            r = i / (img_width - 1)
-            g = j / (img_height - 1)
-            b = 0.25
+            col = Vec3([i / (img_width - 1), j / (img_height - 1), 0.25])
 
-            ir = 255 * r
-            ig = 255 * g
-            ib = 255 * b
-            image[index] = int(ir)
-            image[index+1] = int(ig)
-            image[index+2] = int(ib)
-            print(f'{int(ir)} {int(ig)} {int(ib)}\n')
+            ncol = col.multiply_s(255)
+
+            image[index] = int(ncol.x())
+            image[index+1] = int(ncol.y())
+            image[index+2] = int(ncol.z())
+            print(f'{int(ncol.x())} {int(ncol.y())} {int(ncol.z())}\n')
+
     sys.stderr.write(f'\nDone.\n')
 
     with open("img.ppm", 'wb') as f:
