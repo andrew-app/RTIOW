@@ -53,12 +53,16 @@ class Vec3:
         b = Vec3(e=(self.z() * v.y(), self.x() * v.y(), self.y() * v.x()))
         return Vec3(e=(a.x() - b.x(), a.y() - b.y(), a.z()-b.z()))
 
+    def unitvec(self):
+        u = array.array('f', [self.x()/self.length(), self.y()/self.length(), self.z()/self.length()])
+        return u
+
 
 t1 = Vec3([250, 2, 3])
 
-t2 = Vec3([2, 0, 0])
+t2 = t1.unitvec()
 
-print(t1.dot_p(t2))
+
 
 
 
