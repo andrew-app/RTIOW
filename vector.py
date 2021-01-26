@@ -58,11 +58,6 @@ class Vec3:
         return u
 
 
-t1 = Vec3([250, 2, 3])
-
-t2 = t1.unitvec()
-
-
 
 
 

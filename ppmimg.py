@@ -18,6 +18,7 @@ def main():
     image = array.array('B', [0, 0, 63] * img_width * img_height)
 
 
+
     for j in range(img_height-1, 0, -1):
 
         sys.stderr.write(f'\rScanlines remaining: {j}\n')
