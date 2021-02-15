@@ -50,12 +50,11 @@ class Vec3:
 
     def cross_p(self, v):
         a = Vec3(e=(self.y() * v.z(), self.z() * v.x(), self.x() * v.y()))
-        b = Vec3(e=(self.z() * v.y(), self.x() * v.y(), self.y() * v.x()))
-        return Vec3(e=(a.x() - b.x(), a.y() - b.y(), a.z()-b.z()))
+        b = Vec3(e=(self.z() * v.y(), self.x() * v.z(), self.y() * v.x()))
+        return Vec3(e=(a.x() - b.x(), a.y() - b.y(), a.z() - b.z()))
 
     def unitvec(self):
-        u = array.array('f', [self.x()/self.length(), self.y()/self.length(), self.z()/self.length()])
-        return u
+        return Vec3(e=(self.x()/self.length(), self.y()/self.length(), self.z()/self.length()))
 
 
 

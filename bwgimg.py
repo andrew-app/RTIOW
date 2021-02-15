@@ -3,7 +3,7 @@ import sys
 from PIL import Image
 from vector import Vec3
 from ray import Ray
-
+import math
 
 
 
@@ -30,8 +30,9 @@ def main():
     llc = origin.sub(hlc) #origin - horizontal/2 - vertical/2 - vec3(0, 0, focal_length);
     llc = llc.sub(vlc)
     llc = llc.sub(fl)
-    sphere = [255,0,0]
+    sphere = [255, 0, 0]
     print(f'P6 {img_width} {img_height} {max_val}\n')
+    print(vp_width)
     k = 0
     for j in range(img_height - 1, 0, -1):
 
@@ -49,49 +50,61 @@ def main():
 
             r = llc.add(horizontal.multiply_s(u)).add(vertical.multiply_s(v)).sub(origin)
 
-            unit_direction = r.unitvec()
-            a = unit_direction[1]
-            b = a + 1.0
-            t = 0.5 * b
-            c = 1.0 - t
-            l = 0
-
-            for x in col1:
-                col1[l] = c * x
-                l = l+1
-
-            m = 0
-            for y in col2:
-                col2[m] = t*y
-                m = m+1
-
-            ray_color = [x + y for x, y in zip(col1, col2)]
-            ra = Vec3(ray_color)
-            rayr = round(255 * ra.x())
-            rayg = round(255 * ra.y())
-            rayb = round(255 * ra.z())
             center = Vec3([0, 0, -1])
             oc = origin.sub(center)
             da = r.dot_p(r)
             db = oc.dot_p(r)
-
-
-            db = 2.0*db
+            db = 2.0 * db
             dc = oc.dot_p(oc)
-            dc = dc-0.5*0.5
-            discrim = (db**2)-4*da*dc
+            dc = dc - 0.5 * 0.5
+            discrim = (db ** 2) - 4 * da * dc
 
-            if discrim > 0:
-                image[index] = 255
-                image[index + 1] = 0
-                image[index + 2] = 0
-                print(sphere)
+            if discrim < 0:
+                t = -1.0
+
             else:
+                t = (-db - math.sqrt(discrim)) / (2.0 * da)
+
+
+
+            # Red Circle
+            if t > 0:
+                N = r.multiply_s(t)
+                N = N.sub(center)
+                N = N.unitvec()
+                p = Vec3([1, 1, 1])
+
+                rayN = N.add(p)
+                rayN = rayN.multiply_s(0.5)
+                image[index] = round(255.0*rayN.x())
+                image[index + 1] = round(255.0*rayN.y())
+                image[index + 2] = round(255.0*rayN.z())
+
+            else:
+                unit_direction = r.unitvec()
+                t = 0.5 * (unit_direction.y() + 1.0)
+                l = 0
+
+                for x in col1:
+                    col1[l] = (1.0 - t) * x
+                    l = l + 1
+
+                m = 0
+
+                for y in col2:
+                    col2[m] = t * y
+                    m = m + 1
+
+                ray_color = [x + y for x, y in zip(col1, col2)]
+                retray = Vec3(ray_color)
+                rayr = round(255 * retray.x())
+                rayg = round(255 * retray.y())
+                rayb = round(255 * retray.z())
                 image[index] = rayr
                 image[index + 1] = rayg
                 image[index + 2] = rayb
-                print(ray_color)
 
+            print(image[index], image[index + 1], image[index + 2])
 
 
     sys.stderr.write(f'\nDone.\n')
