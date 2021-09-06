@@ -69,6 +69,13 @@ def main():
 
             # Red Circle
             if t > 0:
+
+                ##Test with red ball first##
+                #image[index] = 255
+                #image[index + 1] = 0
+                #image[index + 2] = 0
+
+                ##Normals proper coloration##
                 N = r.multiply_s(t)
                 N = N.sub(center)
                 N = N.unitvec()
@@ -79,6 +86,7 @@ def main():
                 image[index] = round(255.0*rayN.x())
                 image[index + 1] = round(255.0*rayN.y())
                 image[index + 2] = round(255.0*rayN.z())
+
 
             else:
                 unit_direction = r.unitvec()
