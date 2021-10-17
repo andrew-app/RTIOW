@@ -1,10 +1,10 @@
-import array
+import numpy as np
 import math as m
 
 class Vec3:
     def __init__(self, e=[]):
 
-        self.e = array.array('f', e)
+        self.e = np.array(e)
 
 
     def __str__(self): return str(self.e)
