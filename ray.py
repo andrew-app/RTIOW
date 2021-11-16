@@ -3,12 +3,14 @@ import math as m
 import numpy as np
 class ray:
     def __init__(self, origin, direction):
-        self.orig = Vec3(origin)
-        self.dir = Vec3(direction)
+        self.orig = origin
+        self.dir = direction
+        
 
-    
-    def at(self, t):
-        return self.orig.add(self.dir.multiply_s(t))
+    def at(self,t):
+        dir = self.dir
+        tdir = dir.multiply_s(t)
+        return tdir.add(self.orig)
 
 
 

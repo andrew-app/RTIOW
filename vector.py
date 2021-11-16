@@ -1,6 +1,8 @@
 import numpy as np
 import math as m
+import taichi as ti
 
+ti.init(arch=ti.gpu)
 class Vec3:
     def __init__(self, e=[]):
 
@@ -15,7 +17,7 @@ class Vec3:
     def r(self): return int(self.e[0])
     def g(self): return int(self.e[1])
     def b(self): return int(self.e[2])
-
+ 
     def add(self, v):
         return Vec3(e=(self.x() + v.x(), self.y() + v.y(), self.z() + v.z()))
 

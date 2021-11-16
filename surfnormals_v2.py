@@ -6,43 +6,31 @@ import math
 import numpy as np
 import array
 from tqdm import tqdm
-import taichi as ti
+from hittable import hit_record,hittable
 
-ti.init(arch=ti.gpu)
 
 
 def ray_color(r):
     #linear interpolation to get blended color between blue and white
-    hitsphere = hit_sphere(r)
     r = np.array(r)
-    if hitsphere is True:
-        sphere = Vec3([1,0,0])
-        return sphere
     direction = Vec3(r)
     unit_direction = direction.unitvec()
+    center = Vec3([0,0,-1])
+    origin = Vec3([0,0,0])
+    temp = ray(origin,direction)
+    tst = hittable(center, 0.5)
+    rechit = hit_record()
+    check_hit = tst.hit(temp, 0, 1, rechit)
+    N = rechit.normal #vec3 N = unit_vector(r.at(t) - vec3(0,0,-1))
+    if check_hit is True:
+        N = Vec3([N.x()+1,N.y()+1,N.z()+1]) #color according to normals
+        N = N.multiply_s(0.5) 
+        return N
     t = 0.5*(unit_direction.y() + 1.0) #color blend depends on height of y coordinate(blue at top white at bottom of screen)
     color1 = Vec3([1.0,1.0,1.0])
     color2 = Vec3([0.5,0.7,1.0])
     retval = color1.multiply_s(1.0-t).add(color2.multiply_s(t)) #blended value = (1-t) * startValue + t*endValue
     return retval
-
-
-def hit_sphere(r):
-    hit = False
-    temp = np.array(r)
-    direction = Vec3(temp)
-    center = Vec3([0,0,-1]) #location of sphere center 
-    origin = Vec3([0,0,0]) #centre of camera
-    oc = origin.sub(center)
-    radius = 0.5
-    a = direction.dot_p(direction)
-    b = 2*oc.dot_p(direction)
-    c = oc.dot_p(oc)-radius**2
-    discriminant = b**2-4*a*c
-    if discriminant > 0:
-        hit = True
-
-    return hit
 
 
 def main():
@@ -81,9 +69,9 @@ def main():
     
     
     for j in tqdm(range(int(image_height)-1,0,-1)):
-        i = 0
-        while(i != image_width):
-            i = 1+i
+        
+        for i in range(0,image_width):
+            
             u = i / (image_width-1)
             v = j / (image_height-1)
 
@@ -100,13 +88,14 @@ def main():
             image[index + 1] = px[1]
             image[index + 2] = px[2]
             index = index+3 #traverse to next 3 RGB pixels in array
-    with open("drawsphere.ppm", 'wb') as f:
+    with open("surfnormalsv2.ppm", 'wb') as f:
         f.write(bytearray(ppm_h, 'ascii')) 
         image.tofile(f)
     print("Render Complete.")
-    view_image = Image.open("drawsphere.ppm")
+    view_image = Image.open("surfnormalsv2.ppm")
     view_image.show()
+
+
     
 
 main()
-

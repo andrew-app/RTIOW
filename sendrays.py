@@ -5,7 +5,7 @@ from ray import ray
 import math
 import numpy as np
 import array
-
+from tqdm import tqdm
 def ray_color(t):
     #linear interpolation to get blended color between blue and white
     color1 = Vec3([1.0,1.0,1.0])
@@ -47,10 +47,7 @@ def main():
     ppm_h = f"P6 {image_width} {int(image_height)} {max_val}\n" #!!!Remember to cast to int for image height otherwise error when writing to file
     image = array.array('B', [0, 0, 0] * image_width * int(image_height))
     index = 0
-    for j in range(int(image_height)-1,0,-1):
-
-        sys.stderr.write(f'\rScanlines remaining: {j}\n')
-        sys.stderr.flush()
+    for j in tqdm(range(int(image_height)-1,0,-1)):
         i = 0
         while(i != image_width):
             i = 1+i
@@ -76,7 +73,7 @@ def main():
             image[index + 1] = px[1]
             image[index + 2] = px[2]
             index = index+3 #traverse to next 3 RGB pixels in array
-    sys.stderr.write(f'\nDone.\n')
+    print("Render Complete.")
     with open("sendrays.ppm", 'wb') as f:
         f.write(bytearray(ppm_h, 'ascii'))
         image.tofile(f)
