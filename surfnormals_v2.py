@@ -33,7 +33,7 @@ def ray_color(r):
     return retval
 
 
-def main():
+if __name__ == "__main__":
 
     #Render Image Dimensions
 
@@ -67,7 +67,6 @@ def main():
     image = array.array('B', [0, 0, 0] * image_width * int(image_height))
     index = 0
     
-    
     for j in tqdm(range(int(image_height)-1,0,-1)):
         
         for i in range(0,image_width):
@@ -75,19 +74,18 @@ def main():
             u = i / (image_width-1)
             v = j / (image_height-1)
 
-            # Next 3 lines: ray_direction = lower_left_corner + u*horizontal + v*vertical - origin
-            direction = lower_left_corner.add(horizontal.multiply_s(u))
-            direction = direction.add(vertical.multiply_s(v))
-            direction = direction.sub(origin)
-            pixel_color = ray_color([direction.x(),direction.y(),direction.z()])
-            
-            pixel_color = pixel_color.multiply_s(255) # get lerp values to RGB colorspace
-            px = np.array([pixel_color.r(),pixel_color.g(),pixel_color.b()])
+            # ray_direction = lower_left_corner + u*horizontal + v*vertical - origin
+            direction = lower_left_corner.add(horizontal.multiply_s(u)).add(vertical.multiply_s(v)).sub(origin)
+
+            pixel_color = ray_color([direction.x(),direction.y(),direction.z()]).multiply_s(255)
+            px = np.array([pixel_color.r(),pixel_color.g(),pixel_color.b()], dtype="uint16")
             px[px>max_val]=255 #force max val if needed
+
             image[index] = px[0]
             image[index + 1] = px[1]
             image[index + 2] = px[2]
             index = index+3 #traverse to next 3 RGB pixels in array
+    
     with open("surfnormalsv2.ppm", 'wb') as f:
         f.write(bytearray(ppm_h, 'ascii')) 
         image.tofile(f)
@@ -96,6 +94,3 @@ def main():
     view_image.show()
 
 
-    
-
-main()
