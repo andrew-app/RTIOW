@@ -7,8 +7,7 @@ import numpy as np
 import array
 from tqdm import tqdm
 from hittable import hit_record,hittable
-
-
+from hittable_list import hittable
 
 def ray_color(r):
     #linear interpolation to get blended color between blue and white
@@ -18,13 +17,13 @@ def ray_color(r):
     center = Vec3([0,0,-1])
     origin = Vec3([0,0,0])
     temp = ray(origin,direction)
-    tst = hittable(center, 0.5)
-    rechit = hit_record()
-    check_hit = tst.hit(temp, 0, 1, rechit)
-    N = rechit.normal #vec3 N = unit_vector(r.at(t) - vec3(0,0,-1))
+    tst = hittable(center, 1)
+    rec = hit_record()
+    check_hit = tst.hit(temp, 0, 1, rec)
+    N = rec.normal #vec3 N = unit_vector(r.at(t) - vec3(0,0,-1))
     if check_hit is True:
         N = Vec3([N.x()+1,N.y()+1,N.z()+1]) #color according to normals
-        N = N.multiply_s(0.5) 
+        N = N.multiply_s(0.5)
         return N
     t = 0.5*(unit_direction.y() + 1.0) #color blend depends on height of y coordinate(blue at top white at bottom of screen)
     color1 = Vec3([1.0,1.0,1.0])
@@ -85,7 +84,6 @@ if __name__ == "__main__":
             image[index + 1] = px[1]
             image[index + 2] = px[2]
             index = index+3 #traverse to next 3 RGB pixels in array
-    
     with open("surfnormalsv2.ppm", 'wb') as f:
         f.write(bytearray(ppm_h, 'ascii')) 
         image.tofile(f)

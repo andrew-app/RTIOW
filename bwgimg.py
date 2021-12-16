@@ -7,7 +7,6 @@ import math
 
 
 
-
 def main():
     aspect_ratio = 16 / 9
     img_width = 400

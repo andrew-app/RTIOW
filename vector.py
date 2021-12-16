@@ -1,8 +1,6 @@
 import numpy as np
 import math as m
-import taichi as ti
 
-ti.init(arch=ti.gpu)
 class Vec3:
     def __init__(self, e=[]):
 
